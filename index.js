@@ -14,11 +14,11 @@ return fs.stat(fp)
         var env = get_env()
 
         var arg
-        if (argv[env]) arg = argv[env]
+        if (argv[env]||argv[env[0]]) arg = argv[env]||argv[env[0]]
         else arg = argv._.length ? argv._[0] : "start"
         
-        if (!!!~['start','stop','remove'].indexOf(arg)) {
-            console.log("Usage: dokup <start|stop|remove>")
+        if (!!!~['start','stop','remove', 'build'].indexOf(arg)) {
+            console.log("Usage: dokup <s(tart)|stop|r(emove)|b(uild)>")
             process.exit(1);
         }
 
@@ -30,8 +30,8 @@ return fs.stat(fp)
 
 
 function get_env() {
-    if (argv.production) return "production";
-    if (argv.staging) return "staging";
+    if (argv.production || argv.p) return "production";
+    if (argv.staging||argv.s) return "staging";
     return 'development';
 }
 
@@ -42,9 +42,13 @@ function run(mod, cmd, env) {
             initUI(builder);
 
             switch (cmd) {
+                
                 case "start": return builder.start(true);
+                
                 case "remove": return builder.remove(true, true);
                 case "stop": return builder.stop();
+                
+                case "build": return builder.build(true);
                 default:
                     console.log("Usage: dokup <start|stop|remove>")
                     process.exit(1);
