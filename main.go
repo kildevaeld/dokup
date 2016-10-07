@@ -1,11 +1,10 @@
-//go:generate go-bindata -pkg main -o impl.go  index.js
+//go:generate go-bindata -pkg main -o impl.go  index.js index2.js
 package main
 
 import (
-	"bytes"
 	"net"
-	"os/exec"
 
+	"github.com/kildevaeld/dokup/cmd"
 	"github.com/kildevaeld/notto"
 	"github.com/kildevaeld/notto/modules"
 	"github.com/kildevaeld/notto/modules/archive"
@@ -26,6 +25,8 @@ func GetLocalIP() string {
 
 			if ipnet.IP.To4() != nil {
 				return ipnet.IP.String()
+			} else if ipnet.IP.To16() != nil {
+				return ipnet.IP.String()
 			}
 		}
 	}
@@ -33,6 +34,8 @@ func GetLocalIP() string {
 }
 
 func main() {
+
+	cmd.Execute()
 
 	vm := notto.New()
 
@@ -46,13 +49,13 @@ func main() {
 
 	archive.Define(vm)
 
-	vm.Set("dockermachine", func() string {
+	/*vm.Set("dockermachine", func() string {
 		c := exec.Command("docker-machine", "ip")
 		out := bytes.NewBuffer(nil)
 		c.Stdout = out
 		c.Run()
 		return string(out.Bytes())
-	})
+	})*/
 
 	vm.Set("$HOST_IP", GetLocalIP())
 	home, err := homedir.Dir()
@@ -60,8 +63,17 @@ func main() {
 		vm.Set("$HOME", home)
 	}
 
-	_, err = vm.RunScript(string(MustAsset("index.js")), ".")
+	/*_, err = vm.RunScript(string(MustAsset("index.js")), ".")
 	if err != nil {
 		panic(err)
+	}*/
+
+	v, err := vm.RunScript(string(MustAsset("index2.js")), ".")
+	if err != nil {
+		print(err)
 	}
+
+	v.Object().Call("build")
+
+	v.Call(v, "build", "hello")
 }
