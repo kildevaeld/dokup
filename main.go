@@ -4,7 +4,6 @@ package main
 import (
 	"net"
 
-	"github.com/kildevaeld/dokup/cmd"
 	"github.com/kildevaeld/notto"
 	"github.com/kildevaeld/notto/modules"
 	"github.com/kildevaeld/notto/modules/archive"
@@ -35,7 +34,7 @@ func GetLocalIP() string {
 
 func main() {
 
-	cmd.Execute()
+	//cmd.Execute()
 
 	vm := notto.New()
 
@@ -63,17 +62,17 @@ func main() {
 		vm.Set("$HOME", home)
 	}
 
-	/*_, err = vm.RunScript(string(MustAsset("index.js")), ".")
+	_, err = vm.RunScript(string(MustAsset("index.js")), ".")
 	if err != nil {
 		panic(err)
-	}*/
+	}
 
-	v, err := vm.RunScript(string(MustAsset("index2.js")), ".")
+	/*v, err := vm.RunScript(string(MustAsset("index2.js")), ".")
 	if err != nil {
 		print(err)
 	}
 
 	v.Object().Call("build")
 
-	v.Call(v, "build", "hello")
+	v.Call(v, "build", "hello")*/
 }
