@@ -5,7 +5,6 @@ var argv = require("minimist")(process.argv.slice(1));
 var fs = require("fs");
 var fp = process.cwd() + "/dokup.js";
 
-
 return fs.stat(fp)
     .then(function (stat) {
 
