@@ -12,7 +12,7 @@ type ServiceDesc struct {
 	volume  []string `json:"volume,omitempty`
 	link    []string `json:"link,omitempty"`
 	Tty     bool     `json:"tty,omitempty"`
-	Dependencies
+	Dependencies []ServiceDesc `json:"depdencies"`
 	Production  *ServiceDesc `json:"$production,omitempty"`
 	Staging     *ServiceDesc `json:"$staging,omitempty"`
 	Development *ServiceDesc `json:"$development,omitempty"`
